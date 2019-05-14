@@ -4,9 +4,9 @@
 using namespace std;
 
 double Dr=1.22, Tm=1023.15, XA0=0.98, WB=6900,FH2O=0.034, T0=898, P=121, pc=1440, dHr=139000, MA=106, MB=104, Cp=2.177, pai=3.1416, dl=pow(10,-6);
-double FA0=WB/MB/24/3600/XA0, Ac=pai*pow(Dr,2)/4, dWc=pc*Ac*dl;//½øÁÏÄ¦¶ûÁ÷ÂÊ£¬ºá½ØÃæ»ı£¬Î¢ÔªÌåÄÚ´ß»¯¼ÁµÄÖÊÁ¿
+double FA0=WB/MB/24/3600/XA0, Ac=pai*pow(Dr,2)/4, dWc=pc*Ac*dl;//è¿›æ–™æ‘©å°”æµç‡ï¼Œæ¨ªæˆªé¢ç§¯ï¼Œå¾®å…ƒä½“å†…å‚¬åŒ–å‰‚çš„è´¨é‡
 
-double ra(double T, double XA);//·´Ó¦ËÙÂÊ¼ÆËã
+double ra(double T, double XA);//ååº”é€Ÿç‡è®¡ç®—
 
 int main()
 {
@@ -15,7 +15,7 @@ int main()
 	cout.setf(ios::showpoint);
 	cout.precision(6);
 	cout.setf(ios::fixed);
-	cout << '\t'<< "´²²ã¸ß¶Èl/m" << '\t'<< "·´Ó¦ÎÂ¶ÈT/K"  << '\t' << "×ª»¯ÂÊXA " << endl;
+	cout << '\t'<< "åºŠå±‚é«˜åº¦l/m" << '\t'<< "ååº”æ¸©åº¦T/K"  << '\t' << "è½¬åŒ–ç‡XA " << endl;
 	cout << '\t'<< l << '\t' << T << '\t'<< XA << endl;
 
 	while (XA<XA0)
@@ -23,14 +23,14 @@ int main()
 		double dXA, dT,dTd;
 		double U;
 		U=140*pow(l,-0.33)*4.186/60/1000;
-		dTd=((-dHr)*(-ra(T,XA))*dWc-pai*Dr*U*(T-Tm)*dl)/(FA0 * 106 + 18 * FH2O) / Cp;//´²²ãÎÂ¶È±ä»¯
-		dXA=(-ra(T,XA))*dWc/FA0;//×ª»¯ÂÊ±ä»¯
+		dTd=((-dHr)*(-ra(T,XA))*dWc-pai*Dr*U*(T-Tm)*dl)/(FA0 * 106 + 18 * FH2O) / Cp;//åºŠå±‚æ¸©åº¦å˜åŒ–
+		dXA=(-ra(T,XA))*dWc/FA0;//è½¬åŒ–ç‡å˜åŒ–
 		double rA;
 		rA=(ra(T+dTd, XA+dXA)+ra(T, XA))/2;
 		U=140*pow(l,-0.33)*4.186/60/1000;
 		dT=((-dHr)*(-rA)*dWc-pai*Dr*U*(T+dTd/2-Tm)*dl)/(FA0 * 106 + 18 * FH2O) / Cp;
 
-		while(fabs(dTd - dT) > 1E-5)//µü´úµÃµ½dXAºÍdT
+		while(fabs(dTd - dT) > 1E-5)//è¿­ä»£å¾—åˆ°dXAå’ŒdT
 		{
 			dTd=dT;
 			dXA=(-rA)*dWc/FA0;;
@@ -43,7 +43,7 @@ int main()
 		XA = XA+ dXA;
 		T = T + dT;
 
-		if (l > L0)//Ã¿¸ô0.3mÊä³öÒ»´Î´²²ãÎÂ¶È¡¢×ª»¯ÂÊ
+		if (l > L0)//æ¯éš”0.3mè¾“å‡ºä¸€æ¬¡åºŠå±‚æ¸©åº¦ã€è½¬åŒ–ç‡
 		{
 			L0= L0 + 0.3;
 			cout << '\t'<< l << '\t' << T << '\t' <<XA  << endl;
@@ -53,15 +53,15 @@ int main()
 	L = l;
 	cout << '\t'<< l << '\t' << T << '\t' << XA << endl;
 	cout<<endl;
-	cout << '\t'<< "´²²ã×Ü¸ßL£º" << L<< "m"<<endl;
+	cout << '\t'<< "åºŠå±‚æ€»é«˜Lï¼š" << L<< "m"<<endl;
 
 }
 
-double ra(double T, double XA)//·´Ó¦ËÙÂÊ¼ÆËã
+double ra(double T, double XA)//ååº”é€Ÿç‡è®¡ç®—
 {
 	double k1,k2;
-	k1=2.76*pow(10,-6)*exp(-10983 / T + 9.44);
-	k2=2.76*pow(10,-6)*exp(-3676.394 / T - 10.525);
+	k1=2.87*pow(10,-6)*exp(-10983 / T + 9.44);
+	k2=2.69*pow(10,-6)*exp(-3676.394 / T - 10.525);
 	double yA,yB;
 	yA = (1 - XA)*FA0 / ((1 + XA)*FA0 + FH2O);
 	yB = XA *FA0 / ((1 + XA)*FA0 + FH2O);
